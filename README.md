@@ -2,9 +2,9 @@
 
 **Question:** Which stores and products lose sales because product isn't on the shelf, what does it cost, and where should we act first?
 
-![Dashboard](Screenshot1.png)
-![Dashboard](Screenshot2.png)
-![Dashboard](Screenshot3.png)
+!(Screenshot1.png)
+!(Screenshot2.png)
+!(Screenshot3.png)
 
 
 ## Data
