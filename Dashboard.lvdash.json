@@ -1,0 +1,353 @@
+{
+  "datasets": [
+    {
+      "name": "1dde6959",
+      "displayName": "gold_store_availability_weekly",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.m5.gold_store_availability_weekly",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "3b8322ca",
+      "displayName": "gold_priority_items",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.m5.gold_priority_items",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ee4e9bfb",
+      "displayName": "gold_oos_events",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.m5.gold_oos_events",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "e93c99bd",
+      "displayName": "Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "weekly-availability-by-store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1dde6959",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    },
+                    {
+                      "name": "monthly(week)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `week`)"
+                    },
+                    {
+                      "name": "avg(availability_pct)",
+                      "expression": "AVG(`availability_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Weekly availability by store",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(week)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(availability_pct)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "store_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "estimated-loss-revenue-by-store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1dde6959",
+                  "fields": [
+                    {
+                      "name": "dept_id",
+                      "expression": "`dept_id`"
+                    },
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    },
+                    {
+                      "name": "sum(lost_revenue_est)",
+                      "expression": "SUM(`lost_revenue_est`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Estimated loss revenue by store",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "store_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(lost_revenue_est)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "dept_id",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 6,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "act-here-first",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3b8322ca",
+                  "fields": [
+                    {
+                      "name": "store_id",
+                      "expression": "`store_id`"
+                    },
+                    {
+                      "name": "item_id",
+                      "expression": "`item_id`"
+                    },
+                    {
+                      "name": "lost_revenue_est",
+                      "expression": "`lost_revenue_est`"
+                    },
+                    {
+                      "name": "oos_events",
+                      "expression": "`oos_events`"
+                    },
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "`lost_revenue_est`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Act here first:",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "store_id"
+                  },
+                  {
+                    "fieldName": "item_id"
+                  },
+                  {
+                    "fieldName": "lost_revenue_est"
+                  },
+                  {
+                    "fieldName": "oos_events"
+                  },
+                  {
+                    "fieldName": "measure(count)"
+                  }
+                ],
+                "rowOrder": [
+                  {
+                    "by": "column-reversed",
+                    "field": {
+                      "index": 2
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 12,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "overall-avg-availability",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1dde6959",
+                  "fields": [
+                    {
+                      "name": "avg(availability_pct)",
+                      "expression": "AVG(`availability_pct`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Overall avg availability",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(availability_pct)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 18,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
